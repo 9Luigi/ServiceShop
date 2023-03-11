@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ServiceShop.Domain.Entities;
-using System.Diagnostics;
 
 namespace ServiceShop.Domain
 {

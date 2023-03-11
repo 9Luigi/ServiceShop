@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using ServiceShop.Domain;
 using ServiceShop.Domain.Repositories.Abstract;
 using ServiceShop.Domain.Repositories.EntityFramework;
+using ServiceShop.Service;
 
 namespace ServiceShop
 {
@@ -11,7 +12,14 @@ namespace ServiceShop
         {
             var builder = WebApplication.CreateBuilder(args);
             #region Services
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddAuthorization(opts =>
+            {
+                opts.AddPolicy("AdminArea", policy => { policy.RequireRole("admin"); });
+            });
+            builder.Services.AddControllersWithViews(opts =>
+            {
+                opts.Conventions.Add(new AdminAreaAuthorization("Admin", "AdminArea"));
+            });
 
             builder.Services.AddTransient<ITextFieldsRepository, EFTextFieldsRepository>();
             builder.Services.AddTransient<IServiceItemsRepository, EFServiceItemsRepository>();
@@ -31,7 +39,7 @@ namespace ServiceShop
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
-                options.Cookie.Name = "myCompanyAuth";
+                options.Cookie.Name = "CompanyAuth";
                 options.Cookie.HttpOnly = true;
                 options.LoginPath = "/account/login";
                 options.AccessDeniedPath = "/account/accessdenied";
@@ -45,13 +53,8 @@ namespace ServiceShop
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllerRoute
-                (
-                name: "default",
-                pattern: "{controller}/{action}/{id?}",
-                defaults: new { controller = "Home", action = "Index" }
-                );
-
+            app.MapControllerRoute(name: "admin", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(name: "default", pattern: "{controller}/{action}/{id?}", defaults: new { controller = "Home", action = "Index" });
             app.Run();
         }
     }

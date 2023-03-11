@@ -14,16 +14,16 @@ namespace ServiceShop.Domain.Repositories.EntityFramework
             context.SaveChanges();
         }
 
-        public TextField GetTextFieldById(Guid id) => context.TextFields.FirstOrDefault(tf => tf.Id == id);
+        public TextField GetTextFieldById(Guid id) => context.TextFields.FirstOrDefault(tf => tf.Id == id)!;
 
         public IQueryable<TextField> GetTextFields()
         {
             return context.TextFields;
         }
 
-        public TextField GetTextFieldsByCodeWord(string codeWord)
+        public TextField GetTextFieldByCodeWord(string codeWord)
         {
-            return context.TextFields.FirstOrDefault(tf => tf.CodeWord == codeWord);
+            return context.TextFields.FirstOrDefault(tf => tf.CodeWord == codeWord)!;
         }
 
         public void SaveTextField(TextField entity)

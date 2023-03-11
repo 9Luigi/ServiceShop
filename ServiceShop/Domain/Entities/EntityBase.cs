@@ -32,6 +32,5 @@ namespace ServiceShop.Domain.Entities
 
         [DataType(DataType.Time)]
         public DateTime DateAdded { get; set; }
-
     }
 }
