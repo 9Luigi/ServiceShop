@@ -14,19 +14,27 @@ namespace ServiceShop
             #region Services
             builder.Services.AddAuthorization(opts =>
             {
-                opts.AddPolicy("AdminArea", policy => { policy.RequireRole("admin"); });
+                opts.AddPolicy("AdminArea", policy => { policy.RequireRole("admin"); }); //add policy
             });
             builder.Services.AddControllersWithViews(opts =>
             {
-                opts.Conventions.Add(new AdminAreaAuthorization("Admin", "AdminArea"));
+                opts.Conventions.Add(new AdminAreaAuthorization("Admin", "AdminArea")); //use policy
             });
+
+            builder.Services.AddMemoryCache();
+            builder.Services.AddResponseCompression( //defualt response compression alghoritm
+                options =>
+                {
+                    options.EnableForHttps = true;
+                });
 
             builder.Services.AddTransient<ITextFieldsRepository, EFTextFieldsRepository>();
             builder.Services.AddTransient<IServiceItemsRepository, EFServiceItemsRepository>();
-            builder.Services.AddTransient<DataManager>();
+            builder.Services.AddTransient<DataManager>(); //shared repository for above services 
 
             builder.Services.AddDbContext<AppDbContext>(); //config inside AppDbContext
 
+            //userIdentity config
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(opts =>
             {
                 opts.User.RequireUniqueEmail = true;
@@ -48,7 +56,13 @@ namespace ServiceShop
             #endregion
             var app = builder.Build();
 
-            app.UseStaticFiles();
+            app.UseResponseCompression();
+            //css,js, etc
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                //caches static files (asp-append-version used in css/js views)
+                OnPrepareResponse = ctx => ctx.Context.Response.Headers.Add("Cache-control", "public,max-age=600") 
+            }) ; 
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();

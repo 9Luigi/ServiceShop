@@ -1,32 +1,19 @@
-﻿<div id="header-wrapper">
+﻿@inject IConfiguration config;
+<div id="header-wrapper">
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
 
 				<header id="header">
-					<h1><a href="index.html" id="logo">Minimaxing</a></h1>
+					<h1><a href="/" id="logo">@config["CompanyInfo:CompanyName"]</a></h1>
 					<nav id="nav">
-						<a href="index.html" class="current-page-item">Homepage</a>
-						<a href="twocolumn1.html">Two Column #1</a>
-						<a href="twocolumn2.html">Two Column #2</a>
-						<a href="onecolumn.html">One Column</a>
-						<a href="threecolumn.html">Three Column</a>
+						<a asp-area="" asp-controller="Home" asp-action="Index">Main page</a>
+						<a asp-area="" asp-controller="Services" asp-action="Index" asp-route-id="">Our services</a>
+						<a asp-area="" asp-controller="Home" asp-action="Contacts">Contacts</a>
 					</nav>
 				</header>
 
 			</div>
 		</div>
-	</div>
-</div>
-
-<!-- Banner -->
-<div id="banner-wrapper">
-	<div class="container">
-
-		<div id="banner">
-			<h2>Put something cool here!</h2>
-			<span>And put something almost as cool here, but a bit longer ...</span>
-		</div>
-
 	</div>
 </div>

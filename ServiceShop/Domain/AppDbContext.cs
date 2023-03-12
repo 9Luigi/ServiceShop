@@ -14,6 +14,7 @@ namespace ServiceShop.Domain
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //ConnectionString inside appsettings.json
             IConfigurationRoot configuration = new ConfigurationBuilder()
                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                .AddJsonFile("appsettings.json")
@@ -23,11 +24,13 @@ namespace ServiceShop.Domain
                 builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
             });
         }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //init values for authorization, site pages and services at first migration
             base.OnModelCreating(modelBuilder);
 
+            //create user into database
             modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
             {
                 Id = "44546e06-8719-4ad8-b88a-f271ae9d6eab",
@@ -37,6 +40,7 @@ namespace ServiceShop.Domain
 
             modelBuilder.Entity<IdentityUser>().HasData(new IdentityUser
             {
+                //create user into database
                 Id = "3b62472e-4f66-49fa-a20f-e7685b9565d8",
                 UserName = "admin",
                 NormalizedUserName = "ADMIN",
@@ -49,6 +53,7 @@ namespace ServiceShop.Domain
 
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
             {
+                //assigning user the admin role 
                 RoleId = "44546e06-8719-4ad8-b88a-f271ae9d6eab",
                 UserId = "3b62472e-4f66-49fa-a20f-e7685b9565d8"
             });

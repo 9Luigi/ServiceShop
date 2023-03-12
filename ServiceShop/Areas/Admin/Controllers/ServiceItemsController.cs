@@ -18,11 +18,11 @@ namespace ServiceShop.Areas.Admin.Controllers
 
         public IActionResult Edit(Guid id)
         {
-            var entity = id == default ? new ServiceItem() : dataManager.ServiceItems!.GetServiceItem(id);
+            var entity = id == default ? new ServiceItem() : dataManager.ServiceItems!.GetServiceItemByID(id);
             return View(entity);
         }
         [HttpPost]
-        public IActionResult Edit(ServiceItem model, IFormFile titleImageFile) //TODO refactor, image issue
+        public IActionResult Edit(ServiceItem model, IFormFile titleImageFile) //TODO refactor, redirect don't work if image not update via editing
         {
             if (ModelState.IsValid)
             {

@@ -14,9 +14,9 @@ namespace ServiceShop.Domain.Repositories.EntityFramework
             context.SaveChanges();
         }
 
-        public ServiceItem GetServiceItem(Guid id)
+        public ServiceItem GetServiceItemByID(Guid id)
         {
-            return context.ServiceItems.FirstOrDefault(s=>s.Id==id);
+            return context.ServiceItems.FirstOrDefault(s=>s.Id==id)!;
         }
 
         public IQueryable<ServiceItem> GetServiceItems()

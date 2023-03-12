@@ -2,6 +2,7 @@
 
 namespace ServiceShop.Domain
 {
+    //class for entities managment by database
     public class DataManager
     {
         public ITextFieldsRepository? TextFields { get;set; }
